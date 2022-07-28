@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:imagegame/provider/gameProvider.dart';
 import 'package:imagegame/screens/game.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -65,7 +67,9 @@ class _SplashState extends State<Splash> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xff007B82)),),
-                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Game(),));},
+                onPressed: () {
+                  Provider.of<GameProvider>(context,listen: false).coundown2();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Game(),));},
                 child: Text(
                   "Lets Start",
                   style: GoogleFonts.aldrich(fontSize: 20, color: Colors.white),

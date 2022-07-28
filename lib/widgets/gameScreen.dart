@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:imagegame/provider/gameProvider.dart';
+import 'package:provider/provider.dart';
 
 class GameScreen extends StatefulWidget {
   GameScreen({
@@ -34,212 +35,309 @@ class _GameScreenState extends State<GameScreen> {
       isClikedB = false,
       isClikedC = false,
       isClikedD = false;
-
+  bool isClikedA1 = false,
+      isClikedB1 = false,
+      isClikedC1 = false,
+      isClikedD1 = false;
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              child: Material(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            elevation: 20,
+            child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                elevation: 20,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    child: Image.asset(
-                      widget.image!,
-                      fit: BoxFit.cover,height: 300,width: double.infinity,
-                    )),
-              ),
+                child: Image.asset(
+                  widget.image!,
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: double.infinity,
+                )),
+          ),
+        ),
+        Flexible(
+            child: SizedBox(
+          height: 500,
+          width: 500,
+          child: Column(children: [
+            SizedBox(
+              height: 20,
             ),
-            Flexible(
-                child: SizedBox(
-                  height: 500,
-                  width: 500,
-                  child: Column(children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "What Is My Name",
-                          style: GoogleFonts.aldrich(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black, width: 2),
-                              color: isClikedA &&answerisA?Colors.green:isClikedA &&!answerisA?Colors.red:Colors.purple),
-                          child: TextButton(onHover: (value) {
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "What Is My Name",
+                  style: GoogleFonts.aldrich(
+                      fontSize: 30, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      color: isClikedA && answerisA
+                          ? Colors.green
+                          : isClikedA && !answerisA
+                              ? Colors.red
+                              : Colors.purple),
+                  // wrating the button with IgnorePointer actually makles the button  unclicable when isClikedA=true;
+                  child: IgnorePointer(ignoring: isClikedA,
+                    child: TextButton(
+                      onHover: (value) {},
+                      onPressed: () {
+                        setState(() {
+                          isClikedA = true;
+                        });
+                        if (widget.sugestiona == widget.correct_answer) {
+                          if(!isClikedA1){
+                            Provider.of<GameProvider>(context, listen: false)
+                                .correctAnswerIncreaser();}
+                          setState(() {
+                            isClikedA1=true;
+                            answerisA = true;
+                            isClikedA = true;
+                          });
 
-                          },
-                            onPressed: () {
-                              setState((){ isClikedA = true;})   ;
-                              if (widget.sugestiona == widget.correct_answer) {
-                                setState((){ answerisA = true;isClikedA = true;})   ;
-                              }else   if (widget.sugestionb == widget.correct_answer) {
-                                setState((){ answerisB = true;
-                                isClikedB = true;})   ;
-                              }else   if (widget.sugestionc == widget.correct_answer) {
-                                setState((){ answerisC = true;
-                                isClikedC = true;})   ;
-                              }else   if (widget.sugestiond == widget.correct_answer) {
-                                setState((){ answerisD = true; isClikedD = true;})   ;
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "a. ${widget.sugestiona}",
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.aldrich(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
+                        } else if (widget.sugestionb == widget.correct_answer) {
+                          setState(() {
+                            answerisB = true;
+                            isClikedB = true;
+                          });
+                        } else if (widget.sugestionc == widget.correct_answer) {
+                          setState(() {
+                            answerisC = true;
+                            isClikedC = true;
+                          });
+                        } else if (widget.sugestiond == widget.correct_answer) {
+                          setState(() {
+                            answerisD = true;
+                            isClikedD = true;
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "a. ${widget.sugestiona}",
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.aldrich(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black, width: 2),
-                              color: isClikedB &&answerisB?Colors.green:isClikedB &&!answerisB?Colors.red:Colors.purple),
-
-                          child: TextButton(
-                            onPressed: () {
-                              setState((){ isClikedB = true;})   ;
-                              if (widget.sugestiona == widget.correct_answer) {
-                                setState((){ answerisA = true;   isClikedA = true;})   ;
-                              }else   if (widget.sugestionb == widget.correct_answer) {
-                                setState((){ answerisB = true;
-                                isClikedB = true;})   ;
-                              }else   if (widget.sugestionc == widget.correct_answer) {
-                                setState((){ answerisC = true;
-                                isClikedC = true;})   ;
-                              }else   if (widget.sugestiond == widget.correct_answer) {
-                                setState((){ answerisD = true; isClikedD = true;})   ;
-                              }
-
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "b. ${widget.sugestionb}",
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.aldrich(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black, width: 2),
-                              color: isClikedC &&answerisC?Colors.green:isClikedC &&!answerisC?Colors.red:Colors.purple),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      color: isClikedB && answerisB
+                          ? Colors.green
+                          : isClikedB && !answerisB
+                              ? Colors.red
+                              : Colors.purple),
+                  child: IgnorePointer(ignoring: isClikedB,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isClikedB = true;
+                        });
+                        if (widget.sugestiona == widget.correct_answer) {
+                          setState(() {
+                            answerisA = true;
+                            isClikedA = true;
+                          });
+                        } else if (widget.sugestionb == widget.correct_answer) {
+                          if(!isClikedB1){
+                            Provider.of<GameProvider>(context, listen: false)
+                                .correctAnswerIncreaser();}
+                          setState(() {
+                            isClikedB1=true;
+                            answerisB = true;
+                            isClikedB = true;
+                          });
 
-                          child: TextButton(
-                            onPressed: () {          setState((){ isClikedC = true;})   ;
-                            if (widget.sugestiona == widget.correct_answer) {
-                              setState((){ answerisA = true;   isClikedA = true;})   ;
-                            }else   if (widget.sugestionb == widget.correct_answer) {
-                              setState((){ answerisB = true;
-                              isClikedB = true;})   ;
-                            }else   if (widget.sugestionc == widget.correct_answer) {
-                              setState((){ answerisC = true;
-                              isClikedC = true;})   ;
-                            }else   if (widget.sugestiond == widget.correct_answer) {
-                              setState((){ answerisD = true; isClikedD = true;})   ;
-                            }},
-                            child: Row(
-                              children: [
-                                Text(
-                                  "c. ${widget.sugestionc}",
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.aldrich(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
+                        } else if (widget.sugestionc == widget.correct_answer) {
+                          setState(() {
+                            answerisC = true;
+                            isClikedC = true;
+                          });
+                        } else if (widget.sugestiond == widget.correct_answer) {
+                          setState(() {
+                            answerisD = true;
+                            isClikedD = true;
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "b. ${widget.sugestionb}",
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.aldrich(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black, width: 2),
-                              color: isClikedD &&answerisD?Colors.green:isClikedD &&!answerisD?Colors.red:Colors.purple),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      color: isClikedC && answerisC
+                          ? Colors.green
+                          : isClikedC && !answerisC
+                              ? Colors.red
+                              : Colors.purple),
+                  child: IgnorePointer(ignoring: isClikedC,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isClikedC = true;
+                        });
+                        if (widget.sugestiona == widget.correct_answer) {
+                          setState(() {
+                            answerisA = true;
+                            isClikedA = true;
+                          });
+                        } else if (widget.sugestionb == widget.correct_answer) {
+                          setState(() {
+                            answerisB = true;
+                            isClikedB = true;
+                          });
+                        } else if (widget.sugestionc == widget.correct_answer) {
+                          if(!isClikedC1){
+                            Provider.of<GameProvider>(context, listen: false)
+                                .correctAnswerIncreaser();}
+                          setState(() {
+                            isClikedC1=true;
+                            answerisC = true;
+                            isClikedC = true;
+                          });
 
-                          child: TextButton(
-                            onPressed: () {          setState((){ isClikedD = true;})   ;
-                            if (widget.sugestiona == widget.correct_answer) {
-                              setState((){ answerisA = true;
+                        } else if (widget.sugestiond == widget.correct_answer) {
+                          setState(() {
+                            answerisD = true;
+                            isClikedD = true;
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "c. ${widget.sugestionc}",
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.aldrich(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      color: isClikedD && answerisD
+                          ? Colors.green
+                          : isClikedD && !answerisD
+                              ? Colors.red
+                              : Colors.purple),
+                  child: IgnorePointer(ignoring: isClikedD,
+                    child: IgnorePointer(ignoring: isClikedD,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isClikedD = true;
+                          });
+                          if (widget.sugestiona == widget.correct_answer) {
+                            setState(() {
+                              answerisA = true;
                               isClikedA = true;
-                              })   ;
-                            }else   if (widget.sugestionb == widget.correct_answer) {
-                              setState((){ answerisB = true;
-                              isClikedB = true;})   ;
-                            }else   if (widget.sugestionc == widget.correct_answer) {
-                              setState((){ answerisC = true;
-                              isClikedC = true;})   ;
-                            }else   if (widget.sugestiond == widget.correct_answer) {
-                              setState((){ answerisD = true; isClikedD = true;})   ;
-                            }},
-                            child: Row(
-                              children: [
-                                Text(
-                                  "d. ${widget.sugestiond}",
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.aldrich(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
+                            });
+                          } else if (widget.sugestionb == widget.correct_answer) {
+                            setState(() {
+                              answerisB = true;
+                              isClikedB = true;
+                            });
+                          } else if (widget.sugestionc == widget.correct_answer) {
+                            setState(() {
+                              answerisC = true;
+                              isClikedC = true;
+                            });
+                          } else if (widget.sugestiond == widget.correct_answer) {
+                            if(!isClikedD1){
+                              Provider.of<GameProvider>(context, listen: false)
+                                  .correctAnswerIncreaser();}
+                            setState(() {
+                              isClikedD1=true;
+                              answerisD = true;
+                              isClikedD = true;
+                            });
+
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "d. ${widget.sugestiond}",
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.aldrich(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    )
-                  ]),
-                ))
-          ],
-        ));
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ]),
+        ))
+      ],
+    ));
   }
 }
