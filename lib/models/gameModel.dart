@@ -7,13 +7,14 @@ class GameModel{
   final String answerD;
   final String image;
   final String correctAnswer;
-
+  final int seconds;
   GameModel(
       {required this.answerA,
       required this.answerB,
       required this.answerC,
       required this.answerD,
       required this.image,
-      required this.correctAnswer});
+      required this.correctAnswer,
+        required this.seconds, });
   
 }

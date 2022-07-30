@@ -68,7 +68,8 @@ class _SplashState extends State<Splash> {
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xff007B82)),),
                 onPressed: () {
-                  Provider.of<GameProvider>(context,listen: false).coundown2();
+                  Provider.of<GameProvider>(context,listen: false).coundown2(totalSeconds:Provider.of<GameProvider>(context,listen: false). ListGameModel[0].seconds,delay: 4 );
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Game(),));},
                 child: Text(
                   "Lets Start",

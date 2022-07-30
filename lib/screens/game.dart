@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:imagegame/models/gameModel.dart';
 import 'package:imagegame/provider/gameProvider.dart';
+import 'package:imagegame/screens/result.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/gameScreen.dart';
@@ -17,7 +18,7 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
   int index = 0;
-  PageController controller = PageController(initialPage: 0);
+
 
 
 
@@ -38,7 +39,8 @@ int count=0;
   @override
   Widget build(BuildContext context) {
     // if(count<2){
-    //   Provider.of<GameProvider>(context,listen: false).coundown2();
+  var   _provider_false= Provider.of<GameProvider>(context,listen: false);
+  var   _provider_true= Provider.of<GameProvider>(context,listen: true);
     // }else{count++;}
     return Scaffold(
       body: Column(
@@ -48,22 +50,32 @@ int count=0;
             // child:PageView(children: [Center(child: Text("ada")),Center(child: Text("obi"))]) ,
             // this is the method of auto generating or predefined pages using pageview
             child: PageView.builder(
-              controller: controller,
+              controller: _provider_false.controller,
               onPageChanged: (ind) {
+                print("ada");
+                if(ind!= _provider_true.ListGameModel.length-1){
+                _provider_false.coundown2(totalSeconds:_provider_false. ListGameModel[ind].seconds );
+                _provider_true.ListGameModel.removeAt(this.index);
                 setState(() {
                   this.index = ind;
-                });
+                });}else{
+                  // if( _provider_true.ListGameModel)
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(),));
+                }
+
+
               },
-              itemCount: Provider.of<GameProvider>(context,listen: true).ListGameModel.length,
+              itemCount: _provider_true.ListGameModel.length,
               itemBuilder: (context, index) {
                 this.index = index;
-                return GameScreen(
-                  sugestiona:Provider.of<GameProvider>(context,listen: true). ListGameModel[index].answerA,
-                  sugestionb: Provider.of<GameProvider>(context,listen: true).ListGameModel[index].answerB,
-                  sugestionc: Provider.of<GameProvider>(context,listen: true).ListGameModel[index].answerC,
-                  sugestiond: Provider.of<GameProvider>(context,listen: true).ListGameModel[index].answerD,
-                  image:Provider.of<GameProvider>(context,listen: true). ListGameModel[index].image,
-                  correct_answer: Provider.of<GameProvider>(context,listen: true).ListGameModel[index].correctAnswer,
+                return
+                  GameScreen(seconds:_provider_true. ListGameModel[index].seconds ,
+                  sugestiona:_provider_true. ListGameModel[index].answerA,
+                  sugestionb: _provider_true.ListGameModel[index].answerB,
+                  sugestionc: _provider_true.ListGameModel[index].answerC,
+                  sugestiond: _provider_true.ListGameModel[index].answerD,
+                  image:_provider_true. ListGameModel[index].image,
+                  correct_answer: _provider_true.ListGameModel[index].correctAnswer,
                 );
               },
             ),
@@ -94,13 +106,13 @@ int count=0;
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    " Score : ${Provider.of<GameProvider>(context,listen: true).correctAnswerCounter}  ",
+                    " Score : ${_provider_true.correctAnswerCounter}  ",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.aldrich(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "${Provider.of<GameProvider>(context,listen: true).countdown} Secs To Go  ",
+                    "${_provider_true.countdown} Secs To Go  ",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.aldrich(
                         fontSize: 20, fontWeight: FontWeight.bold),
@@ -116,7 +128,7 @@ int count=0;
                           bottomLeft: Radius.circular(20))),
                   child: TextButton(
                       onPressed: () {
-                        controller.nextPage(
+                        _provider_false.controller.nextPage(
                             duration: Duration(seconds: 3),
                             curve: Curves.bounceIn);
                       },
